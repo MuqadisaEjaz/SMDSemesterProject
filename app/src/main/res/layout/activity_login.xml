@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingStart="16dp"
+        android:paddingTop="16dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="16dp"
+        tools:context=".Login">
+
+        <!-- Top Image -->
+        <ImageView
+            android:id="@+id/imageViewTop"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/login_top"
+            android:scaleType="centerCrop" />
+
+        <!-- Centered Illustration -->
+        <ImageView
+            android:id="@+id/imageViewIllustration"
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/imageViewTop"
+            android:src="@drawable/brain" />
+
+        <!-- LOGIN Text -->
+        <TextView
+            android:id="@+id/textViewLogin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/imageViewIllustration"
+            android:layout_centerHorizontal="true"
+            android:text="LOGIN"
+            android:textColor="@color/black"
+            android:textSize="36sp"
+            android:textStyle="normal"
+            android:layout_marginTop="20dp"/>
+
+        <!-- Email TextField -->
+        <EditText
+            android:id="@+id/editEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textViewLogin"
+            android:layout_marginTop="20dp"
+            android:hint="Enter your email"
+            />
+
+        <!-- Password TextField -->
+        <EditText
+            android:id="@+id/editPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/editEmail"
+            android:layout_marginTop="20dp"
+            android:hint="Enter your password"
+            android:inputType="textPassword"
+            />
+
+        <!-- Forgot Password Text -->
+        <TextView
+            android:id="@+id/textViewForgotPassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/editPassword"
+            android:layout_alignParentEnd="true"
+            android:text="Forgot Password?"
+            android:textColor="@color/black"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            android:layout_marginTop="20dp"/>
+
+        <!-- Login Button -->
+        <Button
+            android:id="@+id/buttonLogin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textViewForgotPassword"
+            android:layout_marginTop="15dp"
+            android:text="Login"
+            android:backgroundTint="@color/purple_500"
+            android:onClick="performLogin"
+            />
+
+        <!-- Register Now Text -->
+        <TextView
+            android:id="@+id/textViewRegisterNow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/buttonLogin"
+            android:layout_marginTop="50dp"
+            android:text="Don’t have an account? "
+            android:textColor="@color/black"
+            android:textSize="15sp"/>
+
+        <!-- Register Now Link -->
+    <TextView
+        android:id="@+id/textViewRegisterLink"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/buttonLogin"
+        android:layout_marginStart="-379dp"
+        android:layout_marginTop="80dp"
+        android:layout_toEndOf="@id/textViewRegisterNow"
+        android:onClick="openRegistrationActivity"
+        android:text="Register Now"
+        android:textColor="@color/black"
+        android:textSize="15dp"
+        android:textStyle="bold" />
+
+
+</RelativeLayout>
