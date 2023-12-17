@@ -14,6 +14,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.messaging.FirebaseMessaging;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import android.content.Context;
@@ -23,20 +26,38 @@ public class Login extends AppCompatActivity {
 
     private EditText editEmail, editPassword;
     private Button buttonLogin;
+    String fcmToken;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        // Inside the onCreate method of your Application class or main activity
+        FirebaseApp.initializeApp(this);
+
+            // This will throw an exception if the token retrieval fails
 
         editEmail = findViewById(R.id.editEmail);
         editPassword = findViewById(R.id.editPassword);
         buttonLogin = findViewById(R.id.buttonLogin);
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful() && task.getResult() != null) {
+                        fcmToken = task.getResult();
+                        Log.d("FCMToken", fcmToken);
+                        //sendTokenToBackend(fcmToken);
+
+                        // Now you can use 'fcmToken' to send notifications to this device
+                    } else {
+                        Log.e("FCMToken", "Failed to get FCM token", task.getException());
+                    }
+                });
 
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 performLogin();
+                sendTokenToBackend(fcmToken);
             }
         });
     }
@@ -100,6 +121,47 @@ public class Login extends AppCompatActivity {
                         // Handle unsuccessful login response
                         Toast.makeText(Login.this, "Invalid credentials", Toast.LENGTH_SHORT).show();
                         Log.e("LoginError", "Error: " + error.toString());
+                    }
+                });
+
+        // Add the request to the RequestQueue
+        Volley.newRequestQueue(this).add(request);
+    }
+
+
+    private void sendTokenToBackend(String fcmToken) {
+        String url = "http://10.0.2.2:4200/api/student/store-fcm"; // Replace with your backend API endpoint
+
+        // Replace 'userEmail' with the actual user's email
+        String email = editEmail.getText().toString().trim(); // Replace with the actual user's email
+        Log.e("email sent", email);
+
+        JSONObject jsonBody = new JSONObject();
+        try {
+            jsonBody.put("email", email);
+            jsonBody.put("token", fcmToken);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, jsonBody,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            // Handle the response from the backend
+                            String message = response.getString("message");
+                            Log.d("BackendResponse", message);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Handle error
+                        Log.e("BackendError", "Error: " + error.toString());
                     }
                 });
 
